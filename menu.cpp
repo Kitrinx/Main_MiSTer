@@ -334,7 +334,7 @@ static void SelectFile(const char* pFileExt, unsigned char Options, unsigned cha
 	} else {
 		char temp_dir[1024];
 		snprintf(temp_dir, 1024, "%s/%s", GAMES_DIR, SelectedPath);
-		if (!(getFileType(SelectedPath) & S_IFDIR)) {
+		if (getFileType(SelectedPath) & S_IFDIR) {
 			Options &= ~SCANO_NOENTER;
 			strncpy(SelectedPath, temp_dir, 1024);
 		}
