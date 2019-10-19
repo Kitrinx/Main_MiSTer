@@ -680,7 +680,7 @@ uint32_t getFileType(const char *name)
 {
 	sprintf(full_path, "%s/%s", getRootDir(), name);
 
-	struct stat64 st;
+	struct stat64 st = {};
 	if (stat64(full_path, &st)) return 0;
 
 	return st.st_mode;

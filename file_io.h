@@ -99,5 +99,6 @@ uint32_t getFileType(const char *name);
 
 #define COEFF_DIR "filters"
 #define GAMMA_DIR "gamma"
+#define GAMES_DIR "games"
 
 #endif
