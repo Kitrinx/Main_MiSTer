@@ -92,6 +92,7 @@ void AdjustDirectory(char *path);
 int ScanDirectory(char* path, int mode, const char *extension, int options, const char *prefix = NULL);
 
 const char *getStorageDir(int dev);
+bool prefixGameDir(char *dir, size_t dir_len);
 const char *getRootDir();
 const char *getFullPath(const char *name);
 

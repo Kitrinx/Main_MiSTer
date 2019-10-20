@@ -167,7 +167,14 @@ static void BootUploadLogo()
 	int i = 0;
 	int adr;
 
-	if (FileOpen(&file, "Amiga/" LOGO_FILE) || FileOpen(&file, LOGO_FILE)) {
+	char temp_dir[1024];
+	char temp_file[1024];
+
+	strncpy(temp_dir, "Amiga", 1024);
+	prefixGameDir(temp_dir, 1024);
+	snprintf(temp_file, 1024, "%s/%s", temp_dir, LOGO_FILE);
+
+	if (FileOpen(&file, temp_file) || FileOpen(&file, LOGO_FILE)) {
 		FileReadSec(&file, buffer);
 		mem_upload_init(SCREEN_BPL1 + LOGO_OFFSET);
 		adr = SCREEN_BPL1 + LOGO_OFFSET;
@@ -226,7 +233,14 @@ static void BootUploadBall()
 	int i = 0;
 	int adr;
 
-	if (FileOpen(&file, "Amiga/" BALL_FILE) || FileOpen(&file, BALL_FILE))
+	char temp_dir[1024];
+	char temp_file[1024];
+
+	strncpy(temp_dir, "Amiga", 1024);
+	prefixGameDir(temp_dir, 1024);
+	snprintf(temp_file, 1024, "%s/%s", temp_dir, BALL_FILE);
+
+	if (FileOpen(&file, temp_file) || FileOpen(&file, BALL_FILE))
 	{
 		FileReadSec(&file, buffer);
 		mem_upload_init(BALL_ADDRESS);
@@ -256,7 +270,14 @@ static void BootUploadCopper()
 	int i = 0;
 	int adr;
 
-	if (FileOpen(&file, "Amiga/" COPPER_FILE) || FileOpen(&file, COPPER_FILE))
+	char temp_dir[1024];
+	char temp_file[1024];
+
+	strncpy(temp_dir, "Amiga", 1024);
+	prefixGameDir(temp_dir, 1024);
+	snprintf(temp_file, 1024, "%s/%s", temp_dir, COPPER_FILE);
+
+	if (FileOpen(&file, temp_file) || FileOpen(&file, COPPER_FILE))
 	{
 		FileReadSec(&file, buffer);
 		mem_upload_init(COPPER_ADDRESS);

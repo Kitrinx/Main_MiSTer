@@ -626,7 +626,7 @@ static void create_path(const char *base_dir, const char* sub_dir)
 
 void FileGenerateScreenshotName(const char *name, char *out_name, int buflen)
 {
-	create_path(SCREENSHOT_DIR, HomeDir);
+	create_path(SCREENSHOT_DIR, CoreName);
 
 	time_t t = time(NULL);
 	struct tm tm = *localtime(&t);
@@ -634,13 +634,13 @@ void FileGenerateScreenshotName(const char *name, char *out_name, int buflen)
 	if (tm.tm_year >= 119) // 2019 or up considered valid time
 	{
 		strftime(datecode, 31, "%Y%m%d_%H%M%S", &tm);
-		snprintf(out_name, buflen, "%s/%s/%s-%s.png", SCREENSHOT_DIR, HomeDir, datecode, name[0] ? name : SCREENSHOT_DEFAULT);
+		snprintf(out_name, buflen, "%s/%s/%s-%s.png", SCREENSHOT_DIR, CoreName, datecode, name[0] ? name : SCREENSHOT_DEFAULT);
 	}
 	else
 	{
 		for (int i = 1; i < 10000; i++)
 		{
-			snprintf(out_name, buflen, "%s/%s/NODATE-%s_%04d.png", SCREENSHOT_DIR, HomeDir, name[0] ? name : SCREENSHOT_DEFAULT, i);
+			snprintf(out_name, buflen, "%s/%s/NODATE-%s_%04d.png", SCREENSHOT_DIR, CoreName, name[0] ? name : SCREENSHOT_DEFAULT, i);
 			if (!getFileType(out_name)) return;
 		}
 	}
@@ -648,9 +648,9 @@ void FileGenerateScreenshotName(const char *name, char *out_name, int buflen)
 
 void FileGenerateSavePath(const char *name, char* out_name)
 {
-	create_path(SAVE_DIR, HomeDir);
+	create_path(SAVE_DIR, CoreName);
 
-	sprintf(out_name, "%s/%s/", SAVE_DIR, HomeDir);
+	sprintf(out_name, "%s/%s/", SAVE_DIR, CoreName);
 	char *fname = out_name + strlen(out_name);
 
 	const char *p = strrchr(name, '/');
@@ -684,6 +684,27 @@ uint32_t getFileType(const char *name)
 	if (stat64(full_path, &st)) return 0;
 
 	return st.st_mode;
+}
+
+bool prefixGameDir(char *dir, size_t dir_len)
+{
+	if (isPathDirectory(dir)) {
+		printf("Found existing: %s\n", dir);
+		return true;
+	}
+
+	char temp_dir[1024];
+	snprintf(temp_dir, 1024, "%s/%s", GAMES_DIR, dir);
+
+	if (isPathDirectory(temp_dir)) {
+		strncpy(dir, temp_dir, dir_len);
+		printf("Prefixed dir to %s\n", temp_dir);
+		return true;
+	}
+
+	printf("Found nothing for %s or %s\n", dir, temp_dir);
+
+	return false;
 }
 
 static int device = 0;
