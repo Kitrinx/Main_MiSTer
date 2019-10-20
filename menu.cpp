@@ -333,6 +333,8 @@ static void SelectFile(const char* pFileExt, unsigned char Options, unsigned cha
 		strcpy(SelectedPath, HomeDir);
 	}
 
+	FileCreatePath(SelectedPath);
+
 	ScanDirectory(SelectedPath, SCANF_INIT, pFileExt, Options);
 	if (!flist_nDirEntries())
 	{

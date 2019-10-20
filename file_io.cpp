@@ -624,6 +624,14 @@ static void create_path(const char *base_dir, const char* sub_dir)
 	mkdir(full_path, S_IRWXU | S_IRWXG | S_IRWXO);
 }
 
+void FileCreatePath(char *dir)
+{
+	if (!isPathDirectory(dir)) {
+		make_fullpath(dir);
+		mkdir(full_path, S_IRWXU | S_IRWXG | S_IRWXO);
+	}
+}
+
 void FileGenerateScreenshotName(const char *name, char *out_name, int buflen)
 {
 	create_path(SCREENSHOT_DIR, CoreName);
@@ -686,27 +694,18 @@ uint32_t getFileType(const char *name)
 	return st.st_mode;
 }
 
-bool prefixGameDir(char *dir, size_t dir_len)
+void prefixGameDir(char *dir, size_t dir_len)
 {
 	if (isPathDirectory(dir)) {
 		printf("Found existing: %s\n", dir);
-		return true;
+		return;
 	}
 
+	FileCreatePath((char *) GAMES_DIR);
 	static char temp_dir[1024];
 	snprintf(temp_dir, 1024, "%s/%s", GAMES_DIR, dir);
-
-	if (isPathDirectory(temp_dir)) {
-		strncpy(dir, temp_dir, dir_len);
-		printf("Prefixed dir to %s\n", temp_dir);
-		return true;
-	}
-
-	printf("Found nothing for %s or %s... creating %s\n", dir, temp_dir, temp_dir);
-	create_path(GAMES_DIR, dir);
 	strncpy(dir, temp_dir, dir_len);
-
-	return false;
+	printf("Prefixed dir to %s\n", temp_dir);
 }
 
 static int device = 0;
