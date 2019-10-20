@@ -6,7 +6,6 @@
 #include "archie.h"
 #include "../../debug.h"
 #include "../../user_io.h"
-#include "../../file_io.h"
 #include "../../input.h"
 
 #define CONFIG_FILENAME  "ARCHIE.CFG"
