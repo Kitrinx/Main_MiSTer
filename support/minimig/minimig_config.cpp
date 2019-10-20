@@ -191,7 +191,7 @@ static char UploadKickstart(char *name)
 static char UploadActionReplay()
 {
 	fileTYPE file = {};
-	if(FileOpen(&file, user_io_make_filepath(HomeDir, "HRTMON.KEY")) || FileOpen(&file, "HRTMON.ROM"))
+	if(FileOpen(&file, user_io_make_filepath(HomeDir, "HRTMON.ROM")) || FileOpen(&file, "HRTMON.ROM"))
 	{
 		int adr, data;
 		puts("Uploading HRTmon ROM... ");
