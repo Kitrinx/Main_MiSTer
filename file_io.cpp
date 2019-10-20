@@ -693,7 +693,7 @@ bool prefixGameDir(char *dir, size_t dir_len)
 		return true;
 	}
 
-	char temp_dir[1024];
+	static char temp_dir[1024];
 	snprintf(temp_dir, 1024, "%s/%s", GAMES_DIR, dir);
 
 	if (isPathDirectory(temp_dir)) {
@@ -702,7 +702,9 @@ bool prefixGameDir(char *dir, size_t dir_len)
 		return true;
 	}
 
-	printf("Found nothing for %s or %s\n", dir, temp_dir);
+	printf("Found nothing for %s or %s... creating %s\n", dir, temp_dir, temp_dir);
+	create_path(GAMES_DIR, dir);
+	strncpy(dir, temp_dir, dir_len);
 
 	return false;
 }

@@ -195,6 +195,25 @@ char* user_io_create_config_name()
 }
 
 static char core_name[16 + 1];  // max 16 bytes for core name
+static char core_dir[1024];
+
+static char filepath_store[1024];
+
+char *user_io_make_filepath(const char *path, const char *filename)
+{
+	snprintf(filepath_store, 1024, "%s/%s", path, filename);
+
+	return filepath_store;
+}
+
+void user_io_set_core_name(const char *name)
+{
+	strncpy(core_name, name, 17);
+	strncpy(core_dir, name, 1024);
+	prefixGameDir(core_dir, 1024);
+
+	printf("Core name set to \"%s\"\n", core_name);
+}
 
 char *user_io_get_core_name()
 {
@@ -203,7 +222,7 @@ char *user_io_get_core_name()
 
 char *user_io_get_core_path(void)
 {
-	return core_path;
+	return core_dir;
 }
 
 const char *user_io_get_core_name_ex()
@@ -301,8 +320,8 @@ static void user_io_read_core_name()
 	char *p = user_io_8bit_get_string(0);
 	if (p && p[0]) strcpy(core_name, p);
 
-	strncpy(core_path, !strcasecmp(p, "minimig") ? "Amiga" : core_name, 1024);
-	prefixGameDir(core_path, 1024);
+	strncpy(core_dir, !strcasecmp(p, "minimig") ? "Amiga" : core_name, 1024);
+	prefixGameDir(core_dir, 1024);
 
 	printf("Core name is \"%s\"\n", core_name);
 }
@@ -746,6 +765,7 @@ void user_io_init(const char *path)
 		puts("Identified Archimedes core");
 		spi_uio_cmd16(UIO_SET_MEMSZ, sdram_sz(-1));
 		send_rtc(1);
+		user_io_set_core_name("Archie");
 		archie_init();
 		user_io_read_core_name();
 		parse_config();
@@ -753,6 +773,7 @@ void user_io_init(const char *path)
 
     case CORE_TYPE_SHARPMZ:
 		puts("Identified Sharp MZ Series core");
+		user_io_set_core_name("sharpmz");
         sharpmz_init();
 		user_io_read_core_name();
 		parse_config();

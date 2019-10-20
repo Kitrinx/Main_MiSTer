@@ -89,15 +89,8 @@ static char UploadKickstart(char *name)
 	fileTYPE file = {};
 	int keysize = 0;
 
-	char temp_dir[1024];
-	char temp_file[1024];
-
-	strncpy(temp_dir, "Amiga", 1024);
-	prefixGameDir(temp_dir, 1024);
-	snprintf(temp_file, 1024, "%s/%s", temp_dir, "ROM.KEY");
-
 	BootPrint("Checking for Amiga Forever key file:");
-	if (FileOpen(&file, temp_file) || FileOpen(&file, "ROM.KEY")) {
+	if (FileOpen(&file, user_io_make_filepath(HomeDir, "ROM.KEY")) || FileOpen(&file, "ROM.KEY")) {
 		keysize = file.size;
 		if (file.size<sizeof(romkey))
 		{
@@ -197,15 +190,8 @@ static char UploadKickstart(char *name)
 
 static char UploadActionReplay()
 {
-	char temp_dir[1024];
-	char temp_file[1024];
-
-	strncpy(temp_dir, "Amiga", 1024);
-	prefixGameDir(temp_dir, 1024);
-	snprintf(temp_file, 1024, "%s/%s", temp_dir, "HRTMON.KEY");
-
 	fileTYPE file = {};
-	if(FileOpen(&file, temp_file) || FileOpen(&file, "HRTMON.ROM"))
+	if(FileOpen(&file, user_io_make_filepath(HomeDir, "HRTMON.KEY")) || FileOpen(&file, "HRTMON.ROM"))
 	{
 		int adr, data;
 		puts("Uploading HRTmon ROM... ");
@@ -351,10 +337,7 @@ static void ApplyConfiguration(char reloadkickstart)
 		spi_uio_cmd8(UIO_MM2_RST, rstval);
 		if (!UploadKickstart(minimig_config.kickstart))
 		{
-			char temp_dir[1024];
-			strncpy(temp_dir, "Amiga", 1024);
-			prefixGameDir(temp_dir, 1024);
-			snprintf(minimig_config.kickstart, 1024, "%s/%s", temp_dir, "KICK.ROM");
+			snprintf(minimig_config.kickstart, 1024, "%s/%s", HomeDir, "KICK.ROM");
 			if (!UploadKickstart(minimig_config.kickstart))
 			{
 				strcpy(minimig_config.kickstart, "KICK.ROM");
@@ -457,10 +440,7 @@ int minimig_cfg_load(int num)
 		// set default configuration
 		memset((void*)&minimig_config, 0, sizeof(minimig_config));  // Finally found default config bug - params were reversed!
 		strncpy(minimig_config.id, config_id, sizeof(minimig_config.id));
-		char temp_dir[1024];
-		strncpy(temp_dir, "Amiga", 1024);
-		prefixGameDir(temp_dir, 1024);
-		snprintf(minimig_config.kickstart, 1024, "%s/%s", temp_dir, "KICK.ROM");
+		snprintf(minimig_config.kickstart, 1024, "%s/%s", HomeDir, "KICK.ROM");
 		minimig_config.memory = 0x11;
 		minimig_config.cpu = 0;
 		minimig_config.chipset = 0;

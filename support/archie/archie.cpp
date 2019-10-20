@@ -197,10 +197,7 @@ void archie_init(void)
 
 	// set config defaults
 	config.system_ctrl = 0;
-	char temp_dir[1024];
-	strncpy(temp_dir, "Archie", 1024);
-	prefixGameDir(temp_dir, 1024);
-	snprintf(config.rom_img, 1024, "%s/%s", temp_dir, "RISCOS.ROM");
+	snprintf(config.rom_img, 1024, "%s/%s", HomeDir, "RISCOS.ROM");
 
 	// try to load config from card
 	int size = FileLoadConfig(CONFIG_FILENAME, 0, 0);
@@ -225,13 +222,10 @@ void archie_init(void)
 	// upload rom file
 	archie_set_rom(config.rom_img);
 
-	char temp_dir_ex[1024];
-
 	// upload ext file
 	//user_io_file_tx("Archie/RISCOS.EXT", 2);
 
-	snprintf(temp_dir_ex, 1024, "%s/%s", temp_dir, "CMOS.DAT");
-	user_io_file_tx(temp_dir_ex, 3);
+	user_io_file_tx(user_io_make_filepath(HomeDir, "CMOS.DAT"), 3);
 
 	user_io_8bit_set_status(0, UIO_STATUS_RESET);
 
